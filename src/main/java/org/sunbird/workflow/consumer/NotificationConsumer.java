@@ -24,7 +24,7 @@ public class NotificationConsumer {
 	private NotificationServiceImpl notificationService;
 
 	@KafkaListener(id = "id2", groupId = "workflowNotificationTopic-consumer", topicPartitions = {
-			@TopicPartition(topic = "${kafka.topics.workflow.notification}", partitions = { "0", "1", "2", "3" }) })
+			@TopicPartition(topic = "${kafka.topics.workflow.notification}", partitions = { "0" }) })
 	public void processMessage(ConsumerRecord<String, String> data) {
 		WfRequest wfRequest = null;
 		try {
