@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 import org.sunbird.workflow.config.Configuration;
 import org.sunbird.workflow.config.Constants;
@@ -134,8 +135,7 @@ public class UserProfileWfServiceImpl implements UserProfileWfService {
 					detailsMap = (Map<String, Object>) wfRequestParamObj.get("toValue");
 					detailsList.add(detailsMap);
 					existingProfileDetail.put((String) wfRequestParamObj.get("fieldKey"), detailsList);
-				}
-				else {
+				} else {
 					logger.error("profile element to be updated is neither arraylist nor hashmap");
 					return null;
 				}
@@ -233,7 +233,10 @@ public class UserProfileWfServiceImpl implements UserProfileWfService {
 								record.put(Constants.UUID, content.get(Constants.USER_ID));
 								record.put(Constants.FIRST_NAME, personalDetails.get(Constants.FIRSTNAME));
 								record.put(Constants.LAST_NAME, personalDetails.get(Constants.LASTNAME));
-								record.put(Constants.EMAIL, personalDetails.get(Constants.PRIMARY_EMAIL));
+								if (!ObjectUtils.isEmpty(personalDetails.get(Constants.PRIMARY_EMAIL)))
+									record.put(Constants.EMAIL, personalDetails.get(Constants.PRIMARY_EMAIL));
+								if (!ObjectUtils.isEmpty(personalDetails.get(Constants.MOBILE)))
+									record.put(Constants.PHONE, personalDetails.get(Constants.MOBILE));
 								userResult.put(record.get(Constants.UUID).toString(), record);
 							}
 						}

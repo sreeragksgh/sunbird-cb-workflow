@@ -139,6 +139,10 @@ public class Constants {
 	public static final String ROLES = "roles";
 	public static final String PUBLIC = "PUBLIC";
 	public static final String VALUE = "value";
+	public static final String MOBILE = "mobile";
+	public static final String PHONE = "phone";
+
+
 
 
 

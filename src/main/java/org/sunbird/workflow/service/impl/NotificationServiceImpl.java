@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.sunbird.workflow.config.Configuration;
 import org.sunbird.workflow.consumer.ApplicationProcessingConsumer;
 import org.sunbird.workflow.models.WfRequest;
@@ -89,7 +90,8 @@ public class NotificationServiceImpl {
 			Map<String, Object> params = new HashMap<>();
 			NotificationRequest request = new NotificationRequest();
 			request.setDeliveryType("message");
-			request.setIds(Arrays.asList((String)recipientInfo.get("email")));
+			if(!ObjectUtils.isEmpty(recipientInfo.get("email")))
+				request.setIds(Arrays.asList((String)recipientInfo.get("email")));
 			request.setMode("email");
 			Template template = new Template();
 			template.setId(EMAILTEMPLATE);
@@ -103,14 +105,16 @@ public class NotificationServiceImpl {
 			template.setParams(params);
 			Config config = new Config();
 			config.setSubject(MAIL_SUBJECT.replace(STATE_NAME_TAG, wfStatusEntity.getCurrentStatus()));
-			config.setSender((String)senderInfo.get("email"));
+			if(!ObjectUtils.isEmpty(senderInfo.get("email")))
+				config.setSender((String)senderInfo.get("email"));
 			Map<String, Object> req = new HashMap<>();
 			request.setTemplate(template);
 			request.setConfig(config);
 			Map<String, List<NotificationRequest>> notificationMap = new HashMap<>();
 			notificationMap.put("notifications", Arrays.asList(request));
 			req.put("request", notificationMap);
-			sendNotification(req);
+			if(!ObjectUtils.isEmpty(request.getIds()) && !ObjectUtils.isEmpty(config.getSender()) )
+				sendNotification(req);
 		}
 	}
 
